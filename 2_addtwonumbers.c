@@ -7,48 +7,41 @@
  */
 struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
     // Moving down the linked list, multiply number by 10
-    unsigned long long int l1_sum = 0, l2_sum = 0, multiplier = 1, end = 0;
+    int l1_val = 0, l2_val = 0, sum = 0, carry = 0, end = 0;
     struct ListNode *ptr1 = l1, *ptr2 = l2;
+    struct ListNode *ans = (struct ListNode *)malloc(sizeof(struct ListNode)), *next = ans;
 
-    while (!end) {
-        l1_sum += ptr1->val * multiplier;
-        multiplier *= 10;
+    while (1) {
+        l1_val = (ptr1 != NULL) ? ptr1->val : 0;
+        l2_val = (ptr2 != NULL) ? ptr2->val : 0;
 
-        if ((ptr1 = ptr1->next) == NULL)
-            end = 1;
-    }
+        sum = l1_val + l2_val + carry;
+        carry = sum / 10;
+        next->val = sum % 10;
 
-    multiplier = 1, end = 0;
+        if (ptr1 == NULL)
+            ;
+        else if ((ptr1 = ptr1->next) == NULL)
+            end++;
+        if (ptr2 == NULL)
+            ;
+        else if ((ptr2 = ptr2->next) == NULL)
+            end++;
 
-    while (!end) {
-        l2_sum += ptr2->val * multiplier;
-        multiplier *= 10;
-
-        if ((ptr2 = ptr2->next) == NULL)
-            end = 1;
-    }
-
-    end = 0;
-
-    l1_sum += l2_sum; // l1_sum carries the answer, l2_will get the pieces
-    // Putting it back into a linked list, do the opposite and mod to get the remainder
-    struct ListNode *ans = (struct ListNode *)malloc(sizeof(struct ListNode));
-    struct ListNode *next = ans;
-
-    while (!end) {
-        l2_sum = l1_sum % 10;
-        l1_sum /= 10;
-        next->val = l2_sum;
-
-        if (l1_sum != 0) {
-            struct ListNode *following = (struct ListNode *)malloc(sizeof(struct ListNode));
-            next->next = following;
-            next = next->next;
-        }
-        else {
+        if (end >= 2) {
+            if (carry) {
+                struct ListNode *following = (struct ListNode *)malloc(sizeof(struct ListNode));
+                next->next = following;
+                next = next->next;
+                next->val = carry;
+            }
             next->next = NULL;
-            end = 1;
+            break;
         }
+
+        struct ListNode *following = (struct ListNode *)malloc(sizeof(struct ListNode));
+        next->next = following;
+        next = next->next;
     }
 
     return ans;
