@@ -7,17 +7,17 @@ double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Si
         halfway++;
 
     int halfwayArray[halfway];
-    printf("Array is of size %d\n", halfway);
 
     for (; i < halfway; i++) {
-        if (p1 < nums1Size && nums1[p1] < nums2[p2])
+        if (p1 < nums1Size && p2 < nums2Size && nums1[p1] < nums2[p2])
             halfwayArray[i] = nums1[p1++];
         else if (p2 < nums2Size)
             halfwayArray[i] = nums2[p2++];
+        
         else {
-            if (p1 < nums1Size && nums1[p1] < nums1Size)
+            if (p1 < nums1Size) 
                 halfwayArray[i] = nums1[p1++];
-            else
+            else if (p2 < nums2Size) 
                 halfwayArray[i] = nums2[p2++];
         }
     }
